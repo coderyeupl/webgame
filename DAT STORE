@@ -1,0 +1,926 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAT STORE - Shop Acc Liên Quân</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f2f5f9;
+    color: #222;
+}
+
+header {
+    background: #102c4c;
+    color: white;
+    padding: 18px 8%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.logo {
+    font-size: 26px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.logo span {
+    color: #55b9ff;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 15px;
+}
+
+nav a:hover {
+    color: #55b9ff;
+}
+
+.cart-button {
+    background: #238bd0;
+    border: none;
+    color: white;
+    padding: 11px 17px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.cart-button:hover {
+    background: #1472b2;
+}
+
+.banner {
+    background: linear-gradient(120deg, #102c4c, #176da5);
+    color: white;
+    padding: 65px 9%;
+}
+
+.banner h1 {
+    font-size: 38px;
+    margin-bottom: 15px;
+}
+
+.banner h1 span {
+    color: #66c6ff;
+}
+
+.banner p {
+    color: #d6e8f7;
+    line-height: 1.7;
+    max-width: 600px;
+}
+
+.banner button {
+    margin-top: 23px;
+    background: #55b9ff;
+    color: #102c4c;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.banner button:hover {
+    background: white;
+}
+
+.container {
+    width: 84%;
+    max-width: 1200px;
+    margin: 40px auto;
+}
+
+.section-title {
+    font-size: 25px;
+    margin-bottom: 10px;
+    color: #102c4c;
+}
+
+.description {
+    color: #777;
+    margin-bottom: 25px;
+    font-size: 14px;
+}
+
+.tools {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.tools input,
+.tools select {
+    padding: 12px;
+    border: 1px solid #ccd5df;
+    border-radius: 5px;
+    background: white;
+    outline: none;
+}
+
+.tools input {
+    flex: 1;
+    min-width: 200px;
+}
+
+.tools input:focus,
+.tools select:focus {
+    border-color: #238bd0;
+}
+
+.game-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+}
+
+.product {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #e0e5eb;
+    transition: 0.2s;
+}
+
+.product:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 5px 15px #00000012;
+}
+
+.product-image {
+    height: 160px;
+    background: linear-gradient(135deg, #163d63, #298bc0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 48px;
+}
+
+.product-info {
+    padding: 17px;
+}
+
+.product-info h3 {
+    color: #163d63;
+    margin-bottom: 12px;
+    font-size: 19px;
+}
+
+.product-info p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.price {
+    color: #e34c4c;
+    font-size: 19px;
+    font-weight: bold;
+    margin: 15px 0;
+}
+
+.product-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.product-buttons button {
+    flex: 1;
+    padding: 10px 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.detail-btn {
+    background: #e7f2fa;
+    color: #176da5;
+}
+
+.add-btn {
+    background: #238bd0;
+    color: white;
+}
+
+.add-btn:hover {
+    background: #176da5;
+}
+
+.detail-btn:hover {
+    background: #d2eafa;
+}
+
+.empty {
+    display: none;
+    text-align: center;
+    color: #777;
+    padding: 30px;
+    grid-column: 1 / -1;
+}
+
+.about {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    line-height: 1.8;
+    color: #666;
+}
+
+footer {
+    background: #102c4c;
+    color: #c7d9e9;
+    text-align: center;
+    padding: 25px;
+    margin-top: 60px;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+/* Hộp thông tin và giỏ hàng */
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #0009;
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+}
+
+.modal-content {
+    background: white;
+    width: 100%;
+    max-width: 480px;
+    padding: 25px;
+    border-radius: 8px;
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    color: #102c4c;
+}
+
+.close {
+    font-size: 27px;
+    cursor: pointer;
+    color: #777;
+}
+
+.close:hover {
+    color: red;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 14px 0;
+    border-bottom: 1px solid #ddd;
+    align-items: center;
+}
+
+.cart-item h4 {
+    color: #163d63;
+    margin-bottom: 6px;
+}
+
+.cart-item p {
+    font-size: 14px;
+    color: #e34c4c;
+}
+
+.quantity {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.quantity button {
+    width: 25px;
+    height: 25px;
+    border: none;
+    background: #e7f2fa;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.remove {
+    border: none;
+    color: red;
+    background: none;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.total {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    font-size: 19px;
+    font-weight: bold;
+    color: #102c4c;
+}
+
+.checkout {
+    width: 100%;
+    background: #238bd0;
+    color: white;
+    padding: 13px;
+    border: none;
+    border-radius: 5px;
+    margin-top: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.checkout:hover {
+    background: #176da5;
+}
+
+.detail-text {
+    line-height: 1.8;
+    color: #666;
+}
+
+.detail-text strong {
+    color: #163d63;
+}
+
+@media(max-width: 850px) {
+    .game-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .container {
+        width: 90%;
+    }
+}
+
+@media(max-width: 550px) {
+    header {
+        padding: 18px 5%;
+    }
+
+    nav {
+        gap: 12px;
+    }
+
+    nav a {
+        font-size: 13px;
+    }
+
+    .banner {
+        padding: 50px 7%;
+    }
+
+    .banner h1 {
+        font-size: 30px;
+    }
+
+    .game-list {
+        grid-template-columns: 1fr;
+    }
+
+    .container {
+        width: 92%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">DAT <span>STORE</span></div>
+
+    <nav>
+        <a href="#home">Trang chủ</a>
+        <a href="#shop">Shop acc</a>
+        <a href="#about">Giới thiệu</a>
+        <button class="cart-button" onclick="openCart()">
+            🛒 Giỏ hàng (<span id="cartCount">0</span>)
+        </button>
+    </nav>
+</header>
+
+<section class="banner" id="home">
+    <h1>CHÀO MỪNG ĐẾN <span>DAT STORE</span></h1>
+
+    <p>
+        Shop tài khoản Liên Quân Mobile.
+        Khám phá những tài khoản với nhiều mức giá
+        và lựa chọn tài khoản phù hợp với bạn.
+    </p>
+
+    <button onclick="document.getElementById('shop').scrollIntoView()">
+        XEM SHOP NGAY
+    </button>
+</section>
+
+<div class="container" id="shop">
+
+    <h2 class="section-title">DANH SÁCH TÀI KHOẢN</h2>
+
+    <p class="description">
+        Các tài khoản dưới đây là dữ liệu mẫu để thử nghiệm website.
+    </p>
+
+    <div class="tools">
+        <input
+            type="text"
+            id="search"
+            placeholder="Tìm theo mã tài khoản..."
+            oninput="filterProducts()"
+        >
+
+        <select id="priceFilter" onchange="filterProducts()">
+            <option value="all">Tất cả mức giá</option>
+            <option value="100000">Dưới 100K</option>
+            <option value="200000">100K - 200K</option>
+            <option value="500000">200K - 500K</option>
+            <option value="1000000">Trên 500K</option>
+        </select>
+    </div>
+
+    <div class="game-list" id="productList"></div>
+
+</div>
+
+<div class="container" id="about">
+    <h2 class="section-title">GIỚI THIỆU DAT STORE</h2>
+
+    <div class="about">
+        <p>
+            Chào mừng bạn đến với DAT STORE!
+            Đây là website giới thiệu và trưng bày
+            tài khoản Liên Quân Mobile.
+        </p>
+
+        <p>
+            Website được xây dựng bằng HTML, CSS và JavaScript.
+            Hiện tại shop đang sử dụng dữ liệu tài khoản mẫu
+            để minh họa chức năng tìm kiếm, xem chi tiết và giỏ hàng.
+        </p>
+
+        <p>
+            Liên hệ: <strong>Facebook của shop</strong>
+            (thay bằng đường dẫn Facebook của bạn).
+        </p>
+    </div>
+</div>
+
+<footer>
+    <h3>DAT STORE</h3>
+    <p>Website giới thiệu tài khoản Liên Quân Mobile</p>
+    <p>© 2026 DAT STORE. All rights reserved.</p>
+</footer>
+
+<!-- Hộp xem chi tiết -->
+<div class="modal" id="detailModal" onclick="outsideClose(event, 'detailModal')">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>CHI TIẾT ACC</h2>
+            <span class="close" onclick="closeModal('detailModal')">&times;</span>
+        </div>
+
+        <div id="detailContent"></div>
+    </div>
+</div>
+
+<!-- Hộp giỏ hàng -->
+<div class="modal" id="cartModal" onclick="outsideClose(event, 'cartModal')">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <h2>GIỎ HÀNG</h2>
+            <span class="close" onclick="closeModal('cartModal')">&times;</span>
+        </div>
+
+        <div id="cartItems"></div>
+
+        <div class="total">
+            <span>Tổng tiền:</span>
+            <span id="totalPrice">0đ</span>
+        </div>
+
+        <button class="checkout" onclick="checkout()">
+            ĐẶT HÀNG
+        </button>
+
+    </div>
+</div>
+
+<script>
+
+// Danh sách tài khoản mẫu
+let products = [
+    {
+        id: 1,
+        name: "ACC DAT001",
+        price: 50000,
+        rank: "Kim Cương",
+        skins: 15,
+        heroes: 25,
+        description: "Tài khoản mẫu dành cho người mới."
+    },
+    {
+        id: 2,
+        name: "ACC DAT002",
+        price: 100000,
+        rank: "Tinh Anh",
+        skins: 30,
+        heroes: 45,
+        description: "Tài khoản mẫu có nhiều trang phục."
+    },
+    {
+        id: 3,
+        name: "ACC DAT003",
+        price: 150000,
+        rank: "Cao Thủ",
+        skins: 45,
+        heroes: 60,
+        description: "Tài khoản mẫu với bộ sưu tập đa dạng."
+    },
+    {
+        id: 4,
+        name: "ACC DAT004",
+        price: 250000,
+        rank: "Cao Thủ",
+        skins: 70,
+        heroes: 80,
+        description: "Tài khoản mẫu có nhiều tướng và skin."
+    },
+    {
+        id: 5,
+        name: "ACC DAT005",
+        price: 350000,
+        rank: "Chiến Tướng",
+        skins: 95,
+        heroes: 95,
+        description: "Tài khoản mẫu dành cho người thích sưu tầm."
+    },
+    {
+        id: 6,
+        name: "ACC DAT006",
+        price: 600000,
+        rank: "Thách Đấu",
+        skins: 130,
+        heroes: 110,
+        description: "Tài khoản mẫu cao cấp."
+    }
+];
+
+// Giỏ hàng
+let cart = [];
+
+try {
+    cart = JSON.parse(localStorage.getItem("datStoreCart")) || [];
+    if (!Array.isArray(cart)) cart = [];
+} catch(error) {
+    cart = [];
+}
+
+// Định dạng tiền Việt Nam
+function formatMoney(number) {
+    return number.toLocaleString("vi-VN") + "đ";
+}
+
+// Hiển thị sản phẩm
+function showProducts(list = products) {
+
+    let html = "";
+
+    list.forEach(function(p) {
+
+        html += `
+        <div class="product">
+
+            <div class="product-image">🎮</div>
+
+            <div class="product-info">
+
+                <h3>${p.name}</h3>
+
+                <p>🏆 Rank: ${p.rank}</p>
+                <p>🎨 Trang phục: ${p.skins}</p>
+                <p>⚔️ Tướng: ${p.heroes}</p>
+
+                <div class="price">
+                    ${formatMoney(p.price)}
+                </div>
+
+                <div class="product-buttons">
+
+                    <button class="detail-btn"
+                    onclick="showDetail(${p.id})">
+                        Chi tiết
+                    </button>
+
+                    <button class="add-btn"
+                    onclick="addCart(${p.id})">
+                        Thêm giỏ
+                    </button>
+
+                </div>
+
+            </div>
+        </div>
+        `;
+    });
+
+    if(list.length === 0) {
+        html = '<div class="empty" style="display:block">Không tìm thấy tài khoản!</div>';
+    }
+
+    document.getElementById("productList").innerHTML = html;
+}
+
+// Tìm kiếm và lọc giá
+function filterProducts() {
+
+    let keyword = document.getElementById("search").value.toLowerCase();
+
+    let price = document.getElementById("priceFilter").value;
+
+    let result = products.filter(function(p) {
+
+        let matchName = p.name.toLowerCase().includes(keyword);
+
+        let matchPrice = true;
+
+        if(price === "100000") {
+            matchPrice = p.price < 100000;
+        }
+
+        else if(price === "200000") {
+            matchPrice = p.price >= 100000 && p.price <= 200000;
+        }
+
+        else if(price === "500000") {
+            matchPrice = p.price > 200000 && p.price <= 500000;
+        }
+
+        else if(price === "1000000") {
+            matchPrice = p.price > 500000;
+        }
+
+        return matchName && matchPrice;
+
+    });
+
+    showProducts(result);
+}
+
+// Xem chi tiết
+function showDetail(id) {
+
+    let p = products.find(function(item) {
+        return item.id === id;
+    });
+
+    document.getElementById("detailContent").innerHTML = `
+        <div class="detail-text">
+            <h3>${p.name}</h3>
+            <p><strong>Giá:</strong> ${formatMoney(p.price)}</p>
+            <p><strong>Rank:</strong> ${p.rank}</p>
+            <p><strong>Số trang phục:</strong> ${p.skins}</p>
+            <p><strong>Số tướng:</strong> ${p.heroes}</p>
+            <p><strong>Mô tả:</strong> ${p.description}</p>
+
+            <button class="checkout"
+            onclick="addCart(${p.id}); closeModal('detailModal')">
+                THÊM VÀO GIỎ HÀNG
+            </button>
+        </div>
+    `;
+
+    document.getElementById("detailModal").style.display = "flex";
+}
+
+// Lưu giỏ hàng
+function saveCart() {
+    localStorage.setItem("datStoreCart", JSON.stringify(cart));
+    updateCart();
+}
+
+// Thêm vào giỏ hàng
+function addCart(id) {
+
+    let item = cart.find(function(p) {
+        return p.id === id;
+    });
+
+    if(item) {
+        item.quantity++;
+    } else {
+        cart.push({
+            id: id,
+            quantity: 1
+        });
+    }
+
+    saveCart();
+
+    alert("Đã thêm tài khoản vào giỏ hàng!");
+
+}
+
+// Cập nhật số lượng trên nút
+function updateCart() {
+
+    let count = 0;
+
+    cart.forEach(function(item) {
+        count += item.quantity;
+    });
+
+    document.getElementById("cartCount").innerText = count;
+}
+
+// Mở giỏ hàng
+function openCart() {
+    showCart();
+    document.getElementById("cartModal").style.display = "flex";
+}
+
+// Hiển thị giỏ hàng
+function showCart() {
+
+    let html = "";
+    let total = 0;
+
+    cart = cart.filter(function(item) {
+        return products.some(function(p) {
+            return p.id === item.id;
+        });
+    });
+
+    cart.forEach(function(item) {
+
+        let p = products.find(function(x) {
+            return x.id === item.id;
+        });
+
+        let money = p.price * item.quantity;
+
+        total += money;
+
+        html += `
+            <div class="cart-item">
+
+                <div>
+                    <h4>${p.name}</h4>
+                    <p>${formatMoney(p.price)}</p>
+
+                    <div class="quantity">
+                        <button onclick="changeQuantity(${p.id}, -1)">-</button>
+
+                        <span>${item.quantity}</span>
+
+                        <button onclick="changeQuantity(${p.id}, 1)">+</button>
+                    </div>
+                </div>
+
+                <div>
+                    <p>${formatMoney(money)}</p>
+                    <button class="remove"
+                    onclick="removeCart(${p.id})">
+                        Xóa
+                    </button>
+                </div>
+
+            </div>
+        `;
+    });
+
+    if(cart.length === 0) {
+        html = "<p>Giỏ hàng đang trống!</p>";
+    }
+
+    document.getElementById("cartItems").innerHTML = html;
+
+    document.getElementById("totalPrice").innerText = formatMoney(total);
+
+    localStorage.setItem("datStoreCart", JSON.stringify(cart));
+
+    updateCart();
+}
+
+// Tăng giảm số lượng
+function changeQuantity(id, amount) {
+
+    let item = cart.find(function(p) {
+        return p.id === id;
+    });
+
+    if(item) {
+        item.quantity += amount;
+
+        if(item.quantity <= 0) {
+            cart = cart.filter(function(p) {
+                return p.id !== id;
+            });
+        }
+    }
+
+    saveCart();
+    showCart();
+}
+
+// Xóa sản phẩm
+function removeCart(id) {
+
+    cart = cart.filter(function(p) {
+        return p.id !== id;
+    });
+
+    saveCart();
+    showCart();
+}
+
+// Đặt hàng demo
+function checkout() {
+
+    if(cart.length === 0) {
+        alert("Bạn chưa có tài khoản trong giỏ hàng!");
+        return;
+    }
+
+    let total = 0;
+
+    cart.forEach(function(item) {
+        let p = products.find(function(x) {
+            return x.id === item.id;
+        });
+
+        total += p.price * item.quantity;
+    });
+
+    alert(
+        "Đơn hàng demo đã được tạo!\n" +
+        "Tổng tiền: " + formatMoney(total) +
+        "\n\nĐây chưa phải giao dịch thật. Vui lòng liên hệ shop để xác nhận đơn hàng."
+    );
+
+}
+
+// Đóng hộp thoại
+function closeModal(id) {
+    document.getElementById(id).style.display = "none";
+}
+
+// Đóng khi nhấn ngoài hộp
+function outsideClose(event, id) {
+    if(event.target.id === id) {
+        closeModal(id);
+    }
+}
+
+// Đóng bằng phím ESC
+document.addEventListener("keydown", function(event) {
+    if(event.key === "Escape") {
+        closeModal("cartModal");
+        closeModal("detailModal");
+    }
+});
+
+// Khởi chạy website
+showProducts();
+updateCart();
+
+</script>
+
+</body>
+</html>
